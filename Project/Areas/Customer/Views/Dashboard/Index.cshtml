@@ -1,0 +1,76 @@
+﻿@model Project.ViewModels.DashboardViewModel
+
+@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+
+
+<div class="message-section">
+    <p>To fill up any forms you must first create your profile with personal, contact, and educational details and it must be approved first. These will help during filling forms.</p>
+</div>
+
+<div class="recommendation-section">
+    <div class="recommendation-box">
+        <div class="recommendation-part">
+            @foreach (var campus in Model.RecommendedCampuses)
+            {
+                <div>
+                    <p>@campus.CampusName</p>
+                    <!--<p>@campus.Province</p>-->
+                    <p>@campus.Address</p>
+                    <p>@campus.CampusChief</p>
+                    <p>@campus.ContactInfo</p>
+                </div>
+            }
+        </div>
+        <div class="recommendation-part">
+            <!-- Add Entrance Notice recommendation here -->
+            <p>Entrance Notice information here.</p>
+        </div>
+        <div class="recommendation-part">
+            <!-- Add Notes recommendation here -->
+            <p>Notes information here.</p>
+        </div>
+        <div class="recommendation-part">
+            <!-- Add other recommendations here -->
+            <p>Other recommendations here.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .message-section {
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        border-radius: 5px;
+    }
+
+    .recommendation-section {
+        display: flex;
+        justify-content: center;
+    }
+
+    .recommendation-box {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        gap: 10px;
+        width: 100%;
+        max-width: 1200px;
+    }
+
+    .recommendation-part {
+        background-color: #e2e3e5;
+        border: 1px solid #d6d8db;
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    .recommendation-part p {
+        margin: 0;
+        padding: 5px 0;
+    }
+</style>

@@ -1,0 +1,63 @@
+﻿@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+@{
+    ViewData["Title"] = "Educational Details";
+}
+
+@model Project.ViewModels.DashboardViewModel
+
+<h2>Educational Details</h2>
+<form method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="Level" class="form-label">Level</label>
+        <input type="text"
+               class="form-control"
+               id="Level"
+               name="Level"
+               value="@Model.EducationalDetails?.Level"
+        @(Model.EducationalDetails?.IsApproved == true ? "readonly" : "")
+               required />
+    </div>
+    <div class="mb-3">
+        <label for="College" class="form-label">College</label>
+        <input type="text"
+               class="form-control"
+               id="College"
+               name="College"
+               value="@Model.EducationalDetails?.College"
+        @(Model.EducationalDetails?.IsApproved == true ? "readonly" : "")
+               required />
+    </div>
+    <div class="mb-3">
+        <label for="Programme" class="form-label">Programme</label>
+        <input type="text"
+               class="form-control"
+               id="Programme"
+               name="Programme"
+               value="@Model.EducationalDetails?.Programme"
+        @(Model.EducationalDetails?.IsApproved == true ? "readonly" : "")
+               required />
+    </div>
+    <div class="mb-3">
+        <label for="AcademicYear" class="form-label">Academic Year</label>
+        <input type="text"
+               class="form-control"
+               id="AcademicYear"
+               name="AcademicYear"
+               value="@Model.EducationalDetails?.AcademicYear"
+        @(Model.EducationalDetails?.IsApproved == true ? "readonly" : "")
+               required />
+    </div>
+    <div class="mb-3">
+        <label for="RegistrationNumber" class="form-label">Registration Number</label>
+        <input type="text"
+               class="form-control"
+               id="RegistrationNumber"
+               name="RegistrationNumber"
+               value="@Model.EducationalDetails?.RegistrationNumber"
+        @(Model.EducationalDetails?.IsApproved == true ? "readonly" : "")
+               required />
+    </div>
+    <button type="submit" class="btn btn-primary" @(Model.EducationalDetails?.IsApproved == true ? "disabled" : "")>Save</button>
+</form>

@@ -1,0 +1,87 @@
+﻿@* @model Project.Models.PersonalDetails *@
+@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+@{
+    ViewData["Title"] = "Personal Details";
+}
+
+@model Project.ViewModels.DashboardViewModel
+
+<h2>Personal Details</h2>
+<form method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="FirstName" class="form-label">First Name</label>
+        <input type="text" 
+               class="form-control" 
+               id="FirstName" 
+               name="FirstName" 
+               value="@Model.PersonalDetails?.FirstName" 
+               @(Model.PersonalDetails?.IsApproved == true ? "readonly" : "") 
+               required />
+    </div>
+    <div class="mb-3">
+        <label for="LastName" class="form-label">Last Name</label>
+        <input type="text" 
+               class="form-control" 
+               id="LastName" 
+               name="LastName" 
+               value="@Model.PersonalDetails?.LastName" 
+               @(Model.PersonalDetails?.IsApproved == true ? "readonly" : "") 
+               required />
+        <div class="mb-3">
+            <label for="Gender" class="form-label">Gender</label>
+            <select class="form-control"
+                    id="Gender"
+                    name="Gender"
+            @(Model.PersonalDetails?.IsApproved == true ? "disabled" : "")
+                    required>
+                @if (Model.PersonalDetails?.Gender == "Male")
+                {
+                    <option value="Male" selected="selected">Male</option>
+                    <option value="Female">Female</option>
+                }
+                else if (Model.PersonalDetails?.Gender == "Female")
+                {
+                    <option value="Male">Male</option>
+                    <option value="Female" selected="selected">Female</option>
+                }
+                else
+                {
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                }
+            </select>
+        </div>
+
+    <div class="mb-3">
+        <label for="DateOfBirth" class="form-label">Date of Birth</label>
+        <input type="date" 
+               class="form-control" 
+               id="DateOfBirth" 
+               name="DateOfBirth" 
+               value="@Model.PersonalDetails?.DateOfBirth.ToString("yyyy-MM-dd")" 
+               @(Model.PersonalDetails?.IsApproved == true ? "readonly" : "") 
+               required />
+    </div>
+        <div class="mb-3">
+            <label for="Photo" class="form-label">Upload Photo</label>
+            @if (Model.PersonalDetails?.PhotoPath != null)
+            {
+                <p>Current Photo:</p>
+                <img src="@Model.PersonalDetails.PhotoPath" alt="Uploaded Photo" style="max-height: 200px;" />
+            }
+            @if (Model.PersonalDetails?.IsApproved == true)
+            {
+                <p>Photo already uploaded and approved.</p>
+            }
+            else
+            {
+                <input type="file" class="form-control" id="PhotoPath" name="PhotoPath" />
+                @* Include a hidden input to retain the current photo path *@
+                <input type="hidden" name="CurrentPhotoPath" value="@Model.PersonalDetails?.PhotoPath" />
+            }
+        </div>
+    <button type="submit" class="btn btn-primary" @(Model.PersonalDetails?.IsApproved == true ? "disabled" : "")>Save</button>
+</form>
+

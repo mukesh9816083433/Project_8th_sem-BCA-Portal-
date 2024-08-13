@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Project.Models.Campus>
+
+@{
+    ViewData["Title"] = "Campuses";
+}
+
+<h2>Campuses</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Province</th>
+            <th>Address</th>
+            <th>Campus Chief</th>
+            <th>Contact Information</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var campus in Model)
+        {
+            <tr>
+                <td>@campus.CampusName</td>
+                <td>@campus.Province</td>
+                <td>@campus.Address</td>
+                <td>@campus.CampusChief</td>
+                <td>@campus.ContactInfo</td>
+            </tr>
+        }
+    </tbody>
+</table>
