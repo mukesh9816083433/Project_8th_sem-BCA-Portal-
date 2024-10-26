@@ -1,0 +1,137 @@
+﻿@model IEnumerable<ApplicationViewModel>
+
+@{
+    Layout = "~/Views/Shared/_CollageLayout.cshtml";
+}
+<style>
+ .badge3 {
+        background-color: #28a745;
+    }
+
+    .badge2 {
+        background-color: #17a2b8;
+    }
+
+    .badge {
+        background-color: #ffc107;
+    }
+</style>
+<h3>Applications for Form</h3>
+
+<div class="container mt-4">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <form asp-action="FormApplication" method="get">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="searchQuery" placeholder="Search by Username">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+<h4>Approved Applications</h4>
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Apply Date</th>
+            <th>Status</th>
+            <th>User Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="approved-applications">
+        @foreach (var application in Model.Where(a => a.Status1))
+        {
+            <tr>
+                <td>@application.ApplyDate.ToShortDateString()</td>
+
+                <td>
+                    @if (application.Status1 && application.Status2)
+                    {
+                        <span class="badge3">Approved</span>
+                    }
+                    else if (application.Status1 && !application.Status2)
+                    {
+                        <span class="badge2">Approved by College</span>
+                    }
+                    else
+                    {
+                        <span class="badge">Pending</span>
+                    }
+                </td>
+                    
+                <td>@application.UserName</td>
+
+                <td><a href="@Url.Action("FormApplicationViewDetail", new { id = application.userId, sem = application.Semester })">View Detail</a></td>
+               
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h4>Not Approved Applications</h4>
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Apply Date</th>
+            <th>Status</th>
+            <th>User Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="not-approved-applications">
+        @foreach (var application in Model.Where(a => !a.Status1))
+        {
+            <tr>
+                <td>@application.ApplyDate.ToShortDateString()</td>
+                <td>
+                    @if (application.Status1 && application.Status2)
+                    {
+                        <span class="badge2">Approved</span>
+                    }
+                    else if (application.Status1 && !application.Status2)
+                    {
+                        <span class="badge1">Approved by College</span>
+                    }
+                    else
+                    {
+                        <span class="badge">Pending</span>
+                    }
+                </td>
+                <td>@application.UserName</td>
+                <td><a href="@Url.Action("FormApplicationViewDetail", new { id = application.userId, sem = application.Semester })">View Detail</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        document.getElementById('search').addEventListener('input', function () {
+            var searchTerm = this.value.toLowerCase();
+            var approvedApps = document.querySelectorAll('#approved-applications tr');
+            var notApprovedApps = document.querySelectorAll('#not-approved-applications tr');
+
+            approvedApps.forEach(function (row) {
+                var username = row.querySelector('td:nth-child(3)').innerText.toLowerCase();
+                if (username.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            notApprovedApps.forEach(function (row) {
+                var username = row.querySelector('td:nth-child(3)').innerText.toLowerCase();
+                if (username.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+}

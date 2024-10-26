@@ -26,5 +26,7 @@ namespace Project.Models
         [Required]
         [MaxLength(50)]
         public string ContactInfo { get; set; }
+        public int LoginCode { get; set; }
+
     }
 }

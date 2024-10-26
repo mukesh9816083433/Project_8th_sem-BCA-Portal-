@@ -1,0 +1,114 @@
+﻿@model DashboardViewModel
+
+@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">First Semester Exam Form</h3>
+        </div>
+        <div class="card-body">
+            @if ( Model.FirstSemExamForm.CollageApproved || Model.FirstSemExamForm.DeanApproved)
+            {
+                <div class="alert alert-success">
+                    This form has been approved by
+                    @if (Model.FirstSemExamForm.CollageApproved)
+                    {
+                        <span class="font-weight-bold">College</span>
+                    }
+                    @if (Model.FirstSemExamForm.DeanApproved)
+                    {
+                        <span class="font-weight-bold"> and Dean</span>
+                    }
+                    , so you cannot make changes.
+                </div>
+            }
+
+            <form asp-action="FirstSemExamForm" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="SelectedSubjects">Select Subjects:</label>
+                    @if (Model.FirstSemExamForm.FirstSemesterSubjects != null && Model.FirstSemExamForm.FirstSemesterSubjects.Any())
+                    {
+                        @foreach (var subject in Model.FirstSemExamForm.FirstSemesterSubjects)
+                        {
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" name="FirstSemExamForm.SelectedSubjects[]" value="@subject.Id"
+                                @(Model.FirstSemExamForm.SelectedSubjects.Contains(subject.Id) ? "checked" : "")
+                                @(Model.FirstSemExamForm.CollageApproved ? "disabled" : "") />
+                                <label class="form-check-label">@subject.Name</label>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>No subjects available for this semester.</p>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label for="PaymentImage">Upload Payment Image:</label>
+                    <input type="file" id="PaymentImage" name="FirstSemExamForm.PaymentImage" accept="image/*" onchange="previewImage();"
+                    @(Model.FirstSemExamForm.CollageApproved ? "disabled" : "") />
+                </div>
+
+                <!-- Image preview section -->
+                <div id="imagePreview" class="mt-3">
+                    @if (!string.IsNullOrEmpty(Model.FirstSemExamForm.PaymentImagePath))
+                    {
+                        <img id="preview" src="@Url.Content(Model.FirstSemExamForm.PaymentImagePath)" alt="Payment Image" class="img-fluid rounded" />
+                    }
+                    else
+                    {
+                        <div class="text-muted">
+                            No payment image uploaded.
+                        </div>
+                    }
+                </div>
+
+                <input type="hidden" name="EightSemExamForm.Collage" value="@Model.FirstSemExamForm.Collagee" />
+
+                @if (!Model.FirstSemExamForm.CollageApproved)
+                {
+                    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                }
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        function previewImage() {
+            var preview = document.getElementById('preview');
+            var file = document.getElementById('PaymentImage').files[0];
+            var reader = new FileReader();
+
+            reader.onloadend = function () {
+                preview.src = reader.result;
+                preview.style.display = 'block';
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else if (preview.src !== "#" && preview.src !== "") {
+                // Keep the existing image visible (if it's not a placeholder)
+                preview.style.display = 'block';
+            } else {
+                preview.src = "#";
+                preview.style.display = 'none';
+            }
+        }
+
+        // Trigger the preview on page load if there's an existing image
+        window.onload = function () {
+            var existingImagePath = '@Url.Content(Model.FirstSemExamForm.PaymentImagePath)';
+            if (existingImagePath && existingImagePath !== "#") {
+                var preview = document.getElementById('preview');
+                preview.src = existingImagePath;
+                preview.style.display = 'block';
+            }
+        };
+    </script>
+}

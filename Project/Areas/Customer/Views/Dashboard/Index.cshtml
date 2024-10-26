@@ -1,51 +1,112 @@
-﻿@model Project.ViewModels.DashboardViewModel
+﻿@model DashboardViewModel
 
 @{
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
 
 
-
-<div class="message-section">
-    <p>To fill up any forms you must first create your profile with personal, contact, and educational details and it must be approved first. These will help during filling forms.</p>
+<div class="message-section alert alert-info">
+    <p><strong>Note:</strong> To fill up any forms, you must first create your profile with personal, contact, and educational details, and it must be approved. This helps during form filling.</p>
 </div>
 
 <div class="recommendation-section">
     <div class="recommendation-box">
-        <div class="recommendation-part">
-            @foreach (var campus in Model.RecommendedCampuses)
+        <!-- Recommended Campuses Section -->
+        @if (string.IsNullOrEmpty(Model.User.Collage))
+        {
+            <div class="recommendation-part campuses-section">
+                <h3 class="section-title">Recommended Campuses</h3>
+                @foreach (var campus in Model.RecommendedCampuses)
+                {
+                    <div class="campus-card">
+                        <h5 class="campus-name">@campus.CampusName</h5>
+                        <p class="campus-address">@campus.Address</p>
+                        <p class="campus-chief">Chief: @campus.CampusChief</p>
+                        <p class="campus-contact">Contact: @campus.ContactInfo</p>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+        <div class="recommendation-part notes-section">
+            <h3 class="section-title">Recommended Notes</h3>
+                <ul class="recommended-notes-list">
+            @foreach (var note in Model.RecommendedNotes)
             {
-                <div>
-                    <p>@campus.CampusName</p>
-                    <!--<p>@campus.Province</p>-->
-                    <p>@campus.Address</p>
-                    <p>@campus.CampusChief</p>
-                    <p>@campus.ContactInfo</p>
-                </div>
+                    <li class="note-item">
+                        <a href="@Url.Action("NoteDetails", new { noteId = note.Id })" class="note-link">
+                            <i class="fas fa-file-pdf"></i>@note.FileName
+                        </a>
+                    </li>
             }
+            </ul>
         </div>
-        <div class="recommendation-part">
-            <!-- Add Entrance Notice recommendation here -->
-            <p>Entrance Notice information here.</p>
-        </div>
-        <div class="recommendation-part">
-            <!-- Add Notes recommendation here -->
-            <p>Notes information here.</p>
-        </div>
-        <div class="recommendation-part">
-            <!-- Add other recommendations here -->
-            <p>Other recommendations here.</p>
+        }
+
+        <!-- Recommended Notices Section -->
+        <div class="recommendation-part notices-section">
+            <h3 class="section-title">Recommended Notices</h3>
+            @if (Model.RecommendedNotices.Any())
+            {
+                @foreach (var notice in Model.RecommendedNotices)
+                {
+                    <div class="card notice-card mb-3">
+                        <div class="card-header notice-header">
+                            <h5>@notice.Heading</h5>
+                            <span class="badge bg-info text-dark">For: @notice.SelectedSubjects</span>
+                        </div>
+
+                        <div class="card-body notice-body">
+                            <p>@notice.Message</p>
+                            @if (!string.IsNullOrEmpty(notice.ImagePath))
+                            {
+                                <img src="@notice.ImagePath" alt="Notice Image" class="img-fluid notice-image" />
+                            }
+                        </div>
+
+                        <div class="card-footer notice-footer">
+                            <small>Posted on: @notice.CreatedAt.ToString("dd MMM yyyy")</small>
+                            <br />
+                            <small>By: <strong>@notice.NoticeBy</strong></small>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="no-notices-message">No notices available at the moment.</p>
+            }
         </div>
     </div>
 </div>
 
+<!-- Improved CSS Styling -->
 <style>
+    .search-form {
+        margin-bottom: 20px;
+    }
+
+    .search-input {
+        width: 100%;
+        max-width: 400px;
+        border-radius: 20px;
+        border: 1px solid #ccc;
+    }
+
+    .search-btn {
+        border-radius: 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+    }
+
     .message-section {
         margin-bottom: 20px;
-        padding: 10px;
-        background-color: #f8d7da;
-        border: 1px solid #f5c6cb;
-        border-radius: 5px;
+        border-radius: 10px;
+        background-color: #e9f7fe;
+        padding: 15px;
+        border-left: 5px solid #007bff;
     }
 
     .recommendation-section {
@@ -54,23 +115,148 @@
     }
 
     .recommendation-box {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(2, 1fr);
-        gap: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
         width: 100%;
-        max-width: 1200px;
+        max-width: 900px;
     }
 
+    .related-notes-section, .recommended-notes-section {
+        margin-top: 30px;
+    }
+
+        .related-notes-section h3, .recommended-notes-section h3 {
+            font-size: 20px;
+            color: #444;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+
+    .related-notes-list, .recommended-notes-list {
+        list-style: none;
+        padding-left: 0;
+    }
     .recommendation-part {
-        background-color: #e2e3e5;
-        border: 1px solid #d6d8db;
-        border-radius: 5px;
-        padding: 10px;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #f8f9fa;
+        border: 1px solid #dcdcdc;
     }
 
-    .recommendation-part p {
-        margin: 0;
-        padding: 5px 0;
+    .section-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #007bff;
+        margin-bottom: 20px;
+    }
+
+    .campuses-section .campus-card {
+        margin-bottom: 15px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #ffffff;
+    }
+
+    .note-link {
+        display: block;
+        padding: 15px;
+        text-decoration: none;
+        color: #007bff;
+        font-size: 16px;
+        font-weight: 500;
+        transition: color 0.2s ease;
+    }
+
+        .note-link:hover {
+            color: #0056b3;
+        }
+
+        .note-link i {
+            margin-right: 8px;
+            color: #ff4500;
+        }
+    .campus-name {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .note-item {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 12px;
+        transition: all 0.3s ease;
+    }
+
+        .note-item:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+    .campus-address, .campus-chief, .campus-contact {
+        margin: 5px 0;
+        color: #555;
+    }
+
+    .notes-section li {
+        margin-bottom: 10px;
+    }
+
+    .notes-section a {
+        font-size: 16px;
+        font-weight: 500;
+        color: #007bff;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+        .notes-section a:hover {
+            color: #0056b3;
+        }
+
+    .notices-section .notice-card {
+        border-radius: 10px;
+        background-color: #f1f3f5;
+        border: 1px solid #ccc;
+    }
+
+    .notice-header h5 {
+        font-size: 20px;
+        color: #007bff;
+        margin-bottom: 10px;
+    }
+
+    .badge {
+        font-size: 14px;
+    }
+
+    .notice-body p {
+        color: #333;
+    }
+
+    .notice-footer small {
+        color: #666;
+    }
+
+    .no-notices-message {
+        color: #999;
+    }
+
+    .img-fluid {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+
+    .note-item {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 12px;
+        transition: all 0.3s ease;
     }
 </style>

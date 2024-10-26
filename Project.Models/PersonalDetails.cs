@@ -12,5 +12,6 @@
         public int UserID { get; set; }
 
         public bool IsApproved { get; set; }
+        public bool IsDeanApproved { get; set; }=false;
     }
 }

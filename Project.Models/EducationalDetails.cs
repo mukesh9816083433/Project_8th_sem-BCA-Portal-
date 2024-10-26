@@ -6,7 +6,11 @@
     public string Programme { get; set; }
     public string AcademicYear { get; set; }
     public string RegistrationNumber { get; set; }
+
+    public String MarksheetPic10 { get; set; }
+    public String MaeksheetPic12 { get; set; }
     public int UserID { get; set; }
 
     public bool IsApproved { get; set; }
+    public bool IsDeanApproved { get; set; } = false;
 }

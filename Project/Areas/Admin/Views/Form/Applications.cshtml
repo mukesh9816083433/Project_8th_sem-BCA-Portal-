@@ -1,0 +1,53 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model IEnumerable<Project.Models.Forms>
+@{
+    ViewData["Title"] = "Manage Applications";
+}
+
+<h3>Manage Applications</h3>
+
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Form Name</th>
+            <th>Status</th>
+            <th>Actions</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var form in Model)
+        {
+            <tr>
+                <td>@form.Name</td>
+                <td>@(form.IsOpen ? "Open" : "Closed")</td>
+                <td>
+                    @if (form.IsOpen)
+                    {
+                        <form asp-action="CloseForm" method="post" style="display:inline;">
+                            <input type="hidden" name="formId" value="@form.Id" />
+                            <button type="submit" class="btn btn-danger">Close</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form asp-action="OpenForm" method="post" style="display:inline;">
+                            <input type="hidden" name="formId" value="@form.Id" />
+                            <button type="submit" class="btn btn-success">Open</button>
+                        </form>
+                    }
+                </td>
+                <td>
+                    <form asp-action="FormApplications" method="get">
+                        <input type="hidden" name="formId" value="@form.Id" />
+
+                        <button type="submit" class="btn btn-danger">Applications</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

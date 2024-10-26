@@ -1,0 +1,104 @@
+﻿@model Project.Models.ViewModel.ReportViewModel
+@{
+   
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    ViewData["Title"] = "Project Summary Report";
+}
+<style>
+    <style >
+    .container {
+        margin-top: 40px;
+    }
+
+    .card {
+        background-color: #f9f9f9;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+        margin: 15px 0;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+    .card-title {
+        font-size: 20px;
+        font-weight: bold;
+        color: #0056b3;
+    }
+
+    .card-body p {
+        font-size: 16px;
+        color: #666;
+    }
+
+    .row {
+        display: flex;
+        justify-content: center;
+    }
+
+    .col-md-6 {
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        text-align: center;
+        color: #333;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
+
+    .stat-number {
+        font-size: 24px;
+        font-weight: bold;
+        color: #007b
+</style>
+<div class="container mt-4">
+    <h2>Project Summary Report</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">User Statistics</h5>
+                    <p>Total Users: @Model.TotalUsers</p>
+                    <p>Active Users: @Model.ActiveUsers</p>
+                    <p>Inactive Users: @Model.InactiveUsers</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Form Statistics</h5>
+                    <p>Total Forms Submitted: @Model.TotalForms</p>
+                    <p>Eight sen Exam Forms: @Model.EntranceFormsCount</p>
+                    <p>First Semester Exam Forms: @Model.FirstSemExamFormsCount</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Notes</h5>
+                    <p>Total Notes Uploaded: @Model.TotalNotes</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Notices</h5>
+                    <p>Total Notices: @Model.TotalNotices</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

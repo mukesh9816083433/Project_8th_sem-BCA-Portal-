@@ -1,0 +1,291 @@
+﻿@model UserDetailsViewModel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    bool allApproved = Model.PersonalDetails.IsDeanApproved && Model.EducationalDetails.IsDeanApproved && Model.ContactDetails.IsDeanApproved;
+}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f8ff;
+    }
+
+    h2, h3 {
+        color: #007bff;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group label, .form-check-label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+
+    .badge-success {
+        background-color: #28a745;
+    }
+
+    .badge-info {
+        background-color: #17a2b8;
+    }
+
+    .badge-warning {
+        background-color: #ffc107;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    table {
+        
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+    }
+
+    table, th, td {
+        border: 1px solid #ccc;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #007bff;
+        
+        font-weight: bold;
+    }
+
+    td {
+        background-color: #f9f9f9;
+    }
+</style>
+
+<div class="container">
+    <h2>User Details</h2>
+    <h3>Personal Details</h3>
+    <p><strong>First Name:</strong> @Model.PersonalDetails.FirstName</p>
+    <p><strong>Last Name:</strong> @Model.PersonalDetails.LastName</p>
+    <p><strong>Gender:</strong> @Model.PersonalDetails.Gender</p>
+    <p><strong>Date of Birth:</strong> @Model.PersonalDetails.DateOfBirth.ToString("yyyy-MM-dd")</p>
+    <div class="mb-3">
+        <label for="Photo" class="form-label">Photo</label>
+        @if (Model.PersonalDetails?.PhotoPath != null)
+        {
+            <img src="@Model.PersonalDetails.PhotoPath" alt="Uploaded Photo" />
+        }
+    </div>
+
+    <h3>Educational Details</h3>
+    <p><strong>Level:</strong> @Model.EducationalDetails.Level</p>
+    <p><strong>College:</strong> @Model.EducationalDetails.College</p>
+    <p><strong>Programme:</strong> @Model.EducationalDetails.Programme</p>
+    <div class="mb-3">
+        <label for="Photo" class="form-label">10th Marksheet</label>
+        @if (Model.EducationalDetails?.MarksheetPic10 != null)
+        {
+            <img src="@Model.EducationalDetails.MarksheetPic10" alt="Uploaded Photo" />
+        }
+    </div>
+    <div class="mb-3">
+        <label for="Photo" class="form-label">12th Marksheet</label>
+        @if (Model.EducationalDetails?.MaeksheetPic12 != null)
+        {
+            <img src="@Model.EducationalDetails.MaeksheetPic12" alt="Uploaded Photo" />
+        }
+    </div>
+
+    <h3>Contact Details</h3>
+    <p><strong>District:</strong> @Model.ContactDetails.District</p>
+    <p><strong>Permanent Address:</strong> @Model.ContactDetails.PermanentAddress</p>
+
+    <h3>Approval</h3>
+    <form method="post" asp-action="ApproveUserDetails">
+        <input type="hidden" name="userId" value="@Model.UserId" />
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="ApprovePersonal" id="ApprovePersonal" value="true"
+            @(Model.PersonalDetails.IsDeanApproved ? "checked disabled" : "")>
+            <label class="form-check-label" for="ApprovePersonal">Approve Personal Details</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="ApproveEducational" id="ApproveEducational" value="true"
+            @(Model.EducationalDetails.IsDeanApproved ? "checked disabled" : "")>
+            <label class="form-check-label" for="ApproveEducational">Approve Educational Details</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="ApproveContact" id="ApproveContact" value="true"
+            @(Model.ContactDetails.IsDeanApproved ? "checked disabled" : "")>
+            <label class="form-check-label" for="ApproveContact">Approve Contact Details</label>
+        </div>
+        <button type="submit" class="btn btn-success" @(allApproved ? "disabled" : "")>Save Approvals</button>
+    </form>
+
+    <h2>Applications</h2>
+    @if (Model != null && Model.ApplicationViewModel != null && Model.ApplicationViewModel.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Apply Date</th>
+                    <th>College</th>
+                    <th>Semester</th>
+                    <th>Status</th>
+                    <th>View</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var application in Model.ApplicationViewModel)
+                {
+                    <tr>
+                        <td>@application.ApplyDate</td>
+                        <td>@application.College</td>
+                        <td>@application.Semester</td>
+                        <td>
+                            <span class="badge @(application.Status == "Approved" ? "badge-success" : application.Status == "Collage Approved" ? "badge-info" : "badge-warning")">
+                                @(application.Status ?? "Unknown")
+                            </span>
+                        </td>
+                        <td><a href="@Url.Action("FormApplicationViewDetail","Form", new { id = application.userId, sem = application.Semester })">View Detail</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No applications found.</p>
+    }
+</div>
+
+
+@*
+@model UserDetailsViewModel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml"; 
+ 
+}
+<h2>User Details</h2>
+
+<h3>Personal Details</h3>
+<p><strong>First Name:</strong> @Model.PersonalDetails.FirstName</p>
+<p><strong>Last Name:</strong> @Model.PersonalDetails.LastName</p>
+<p><strong>Gender:</strong> @Model.PersonalDetails.Gender</p>
+<p><strong>Date of Birth:</strong> @Model.PersonalDetails.DateOfBirth.ToString("yyyy-MM-dd")</p>
+<div class="mb-3">
+    <label for="Photo" class="form-label"> Photo</label>
+    @if (Model.PersonalDetails?.PhotoPath != null)
+    {
+        <img src="@Model.PersonalDetails.PhotoPath" alt="Uploaded Photo" style="max-height: 200px;" />
+    }
+    </<div>
+
+<h3>Educational Details</h3>
+<p><strong>Level:</strong> @Model.EducationalDetails.Level</p>
+<p><strong>College:</strong> @Model.EducationalDetails.College</p>
+<p><strong>Programme:</strong> @Model.EducationalDetails.Programme</p>
+        <div class="mb-3">
+            <label for="Photo" class="form-label"> 10th Marksheet</label>
+              @if (Model.EducationalDetails?.MarksheetPic10 != null)
+               {
+                 <img src="@Model.EducationalDetails.MarksheetPic10" alt="Uploaded Photo" style="max-height: 200px;" />
+               }
+        </<div>
+        <div class="mb-3">
+             <label for="Photo" class="form-label"> 12th Marksheet</label>
+                @if (Model.EducationalDetails?.MaeksheetPic12 != null)
+                  {
+                    <img src="@Model.EducationalDetails.MaeksheetPic12" alt="Uploaded Photo" style="max-height: 200px;" />
+                  }
+        </<div>
+             
+
+<h3>Contact Details</h3>
+<p><strong>District:</strong> @Model.ContactDetails.District</p>
+<p><strong>Permanent Address:</strong> @Model.ContactDetails.PermanentAddress</p>
+
+<h3>Approval</h3>
+<form method="post" asp-action="ApproveUserDetails">
+    <input type="hidden" name="userId" value="@Model.UserId" /> 
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="ApprovePersonal" id="ApprovePersonal" value="true"
+        @(Model.PersonalDetails.IsDeanApproved ? "checked disabled" : "")>
+        <label class="form-check-label" for="ApprovePersonal">Approve Personal Details</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="ApproveEducational" id="ApproveEducational" value="true"
+        @(Model.EducationalDetails.IsDeanApproved ? "checked disabled" : "")>
+        <label class="form-check-label" for="ApproveEducational">Approve Educational Details</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="ApproveContact" id="ApproveContact" value="true"
+        @(Model.ContactDetails.IsDeanApproved ? "checked disabled" : "")>
+        <label class="form-check-label" for="ApproveContact">Approve Contact Details</label>
+    </div>
+    <button type="submit"  class="btn btn-success">Save Approvals</button>
+</form>
+                        <h2>Applications</h2>
+                        @if (Model != null && Model.ApplicationViewModel != null && Model.ApplicationViewModel.Any())
+
+                        {
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Apply Date</th>
+                                        <th>College</th>
+                                        <th>Semester</th>
+                                        <th>Status</th>
+                                        <th>View</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var application in Model.ApplicationViewModel)
+
+                                    {
+                                        <tr>
+                                            <td>@application.ApplyDate</td>
+                                            <td>@application.College</td>
+                                            <td>@application.Semester</td>
+                                            <td>
+                                                <span class="badge
+                            @(application.Status == "Approved" ? "badge-success text-dark" :
+                              application.Status == "Collage Approved" ? "badge-info text-dark" :
+                              "badge-warning text-dark")">
+                                                    @(application.Status ?? "Unknown")
+                                                </span>
+                                            </td>
+                                            <td><a href="@Url.Action("FormApplicationViewDetail","Form", new { id = application.userId, sem = application.Semester })">View Detail</a></td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+
+                        else
+
+                        {
+                            <p>No applications found.</p>
+                        }
+ *@

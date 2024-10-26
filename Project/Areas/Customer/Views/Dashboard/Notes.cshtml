@@ -1,0 +1,60 @@
+﻿@model DashboardViewModel
+
+@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<h3>Notes</h3>
+
+<div class="container">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <form method="get" asp-action="Notes">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="searchQuery" placeholder="Search subjects or notes..." />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @foreach (var semester in Model.EightSemesterSubjects.GroupBy(s => s.Semester.Name))
+    {
+        <h4>@semester.Key</h4>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Notes</th>
+                  
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var subject in semester)
+                {
+                    <tr>
+                        <td>@subject.Name</td>
+                        <td>
+                            @if (subject.Notes.Count > 0)
+                            {
+                                <ul>
+                                    @foreach (var note in subject.Notes)
+                                    {
+                                        <li><a href="@Url.Action("NoteDetails", new { noteId = note.Id })" target="_blank">@note.FileName</a></li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <span>No notes available.</span>
+                            }
+                        </td>
+                       
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

@@ -30,6 +30,8 @@ namespace Project.Models
         [MaxLength(200)]
         public string Address { get; set; }
 
+        [MaxLength(200)]
+        public string Collage { get; set; }
         public bool IsActive { get; set; }
     }
 }

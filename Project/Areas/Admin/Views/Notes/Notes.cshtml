@@ -1,0 +1,112 @@
+﻿@model IEnumerable<Project.Models.Semester>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Manage Notes";
+}
+
+<div class="container">
+    <h3 class="text-center">Manage Notes</h3>
+
+    <!-- Search Bar -->
+    @using (Html.BeginForm("Notes", "Notes", FormMethod.Get, new { area = "Admin" }))
+    {
+        <div class="input-group mb-3">
+            <input type="text" name="searchQuery" class="form-control" placeholder="Search subjects or notes..." />
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+        </div>
+    }
+
+    <hr />
+
+    <!-- Form to Add New Semester -->
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Add New Semester</h3>
+            <form asp-action="AddSemester" method="post">
+                <div class="form-group">
+                    <label for="semesterName">Semester Name</label>
+                    <input type="text" name="semesterName" class="form-control" required />
+                </div>
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-plus"></i> Add Semester
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <hr />
+
+    <!-- List of Semesters, Subjects, and Notes -->
+    @foreach (var semester in Model)
+    {
+        <div class="card mt-4">
+            <div class="card-header">
+                <h4>@semester.Name <i class="fas fa-folder"></i></h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="AddSubject" method="post" class="mb-3">
+                    <div class="form-group">
+                        <label for="subjectName">Subject Name</label>
+                        <input type="text" name="subjectName" class="form-control" required />
+                        <input type="hidden" name="semesterId" value="@semester.Id" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Subject
+                    </button>
+                </form>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Note</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var subject in semester.Subjects)
+                        {
+                            <tr>
+                                <td>@subject.Name</td>
+                                <td>
+                                    @foreach (var note in subject.Notes)
+                                    {
+                                        <div class="note-item">
+                                            <a href="@Url.Content(note.FilePath)" target="_blank">
+                                                <i class="far fa-file-alt"></i> @note.FileName
+                                            </a>
+                                            <form asp-action="DeleteNote" method="post" class="d-inline" style="margin-left: 50px;">
+                                                <input type="hidden" name="noteId" value="@note.Id" />
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="fas fa-trash"></i> Delete Note
+                                                </button>
+                                            </form>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    <form asp-action="DeleteSubject" method="post" class="d-inline">
+                                        <input type="hidden" name="subjectId" value="@subject.Id" />
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash"></i> Delete Subject
+                                        </button>
+                                    </form>
+                                    <form asp-action="AddNote" method="post" enctype="multipart/form-data" class="d-inline" style="margin-top: 50px;">
+                                        <input type="hidden" name="subjectId" value="@subject.Id" />
+                                        <input type="file" name="file" class="form-control" required />
+                                        <button type="submit" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-plus"></i> Add Note
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>

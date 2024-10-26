@@ -45,6 +45,9 @@ namespace Project.DataAccess.Migrations
                     b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsDeanApproved")
+                        .HasColumnType("bit");
+
                     b.Property<string>("PermanentAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -76,7 +79,18 @@ namespace Project.DataAccess.Migrations
                     b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsDeanApproved")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Level")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MaeksheetPic12")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MarksheetPic10")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -94,44 +108,6 @@ namespace Project.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("EducationalDetails");
-                });
-
-            modelBuilder.Entity("PersonalDetails", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Gender")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsApproved")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhotoPath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PersonalDetails");
                 });
 
             modelBuilder.Entity("Project.Models.Campus", b =>
@@ -162,6 +138,9 @@ namespace Project.DataAccess.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int>("LoginCode")
+                        .HasColumnType("int");
+
                     b.Property<string>("Province")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -179,6 +158,7 @@ namespace Project.DataAccess.Migrations
                             CampusChief = "Jiwan Pokhrel",
                             CampusName = "Mechi Multiple Campus",
                             ContactInfo = "9852655607",
+                            LoginCode = 11111,
                             Province = "Province 1"
                         },
                         new
@@ -188,6 +168,7 @@ namespace Project.DataAccess.Migrations
                             CampusChief = "Dinanath Phuyal",
                             CampusName = "Mahendra Ratna Multiple Campus",
                             ContactInfo = "9812345678",
+                            LoginCode = 22222,
                             Province = "Province 1"
                         },
                         new
@@ -197,6 +178,7 @@ namespace Project.DataAccess.Migrations
                             CampusChief = "Tulsi Ram Pokhrel",
                             CampusName = "Jwala Prasad Syo Wai Devi Murarka Campus",
                             ContactInfo = "9812365855",
+                            LoginCode = 33333,
                             Province = "Province 2"
                         },
                         new
@@ -206,8 +188,380 @@ namespace Project.DataAccess.Migrations
                             CampusChief = "Krishna Pokhrel",
                             CampusName = "Bhaktapur Multiple Campus",
                             ContactInfo = "990000045678",
+                            LoginCode = 44444,
                             Province = "Province 3"
                         });
+                });
+
+            modelBuilder.Entity("Project.Models.EightSemExamForm", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Collage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("CollageApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DeanApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PaymentImagePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SelectedSubjects")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SubmittedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EighthSemExamForms");
+                });
+
+            modelBuilder.Entity("Project.Models.EntranceForm", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Collage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("CollageApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DeanApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PaymentImagePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SubmittedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EntranceForms");
+                });
+
+            modelBuilder.Entity("Project.Models.FirstSemExamForm", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Collage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("CollageApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DeanApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PaymentImagePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SelectedSubjects")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SubmittedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("FirstSemExamForms");
+                });
+
+            modelBuilder.Entity("Project.Models.Forms", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsOpen")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Forms");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsOpen = false,
+                            Name = "Entrance Form"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsOpen = false,
+                            Name = "Registration Form"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsOpen = false,
+                            Name = "1st Sem Exam Form"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            IsOpen = false,
+                            Name = "2nd Sem Exam Form"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            IsOpen = false,
+                            Name = "3rd Sem Exam Form"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            IsOpen = false,
+                            Name = "4th Sem Exam Form"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            IsOpen = false,
+                            Name = "5th Sem Exam Form"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            IsOpen = false,
+                            Name = "6th Sem Exam Form"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            IsOpen = false,
+                            Name = "7th Sem Exam Form"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            IsOpen = false,
+                            Name = "8th Sem Exam Form"
+                        });
+                });
+
+            modelBuilder.Entity("Project.Models.Note", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("Notes");
+                });
+
+            modelBuilder.Entity("Project.Models.Notice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Heading")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAllSemesters")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NoticeBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SelectedSubjects")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notice");
+                });
+
+            modelBuilder.Entity("Project.Models.PersonalDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeanApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhotoPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PersonalDetails");
+                });
+
+            modelBuilder.Entity("Project.Models.SecondSemExamForm", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Collage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("CollageApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DeanApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PaymentImagePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SelectedSubjects")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SubmittedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SecondSemExamForms");
+                });
+
+            modelBuilder.Entity("Project.Models.Semester", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("NoticeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NoticeId1")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NoticeId");
+
+                    b.HasIndex("NoticeId1");
+
+                    b.ToTable("Semesters");
+                });
+
+            modelBuilder.Entity("Project.Models.Subject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SemesterId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SemesterId");
+
+                    b.ToTable("Subjects");
                 });
 
             modelBuilder.Entity("Project.Models.User", b =>
@@ -219,6 +573,11 @@ namespace Project.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserID"));
 
                     b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Collage")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
@@ -253,6 +612,100 @@ namespace Project.DataAccess.Migrations
                     b.HasKey("UserID");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Project.Models.EightSemExamForm", b =>
+                {
+                    b.HasOne("Project.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Project.Models.EntranceForm", b =>
+                {
+                    b.HasOne("Project.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Project.Models.FirstSemExamForm", b =>
+                {
+                    b.HasOne("Project.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Project.Models.Note", b =>
+                {
+                    b.HasOne("Project.Models.Subject", "Subject")
+                        .WithMany("Notes")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("Project.Models.SecondSemExamForm", b =>
+                {
+                    b.HasOne("Project.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Project.Models.Semester", b =>
+                {
+                    b.HasOne("Project.Models.Notice", null)
+                        .WithMany("Semester")
+                        .HasForeignKey("NoticeId");
+
+                    b.HasOne("Project.Models.Notice", null)
+                        .WithMany("Semesters")
+                        .HasForeignKey("NoticeId1");
+                });
+
+            modelBuilder.Entity("Project.Models.Subject", b =>
+                {
+                    b.HasOne("Project.Models.Semester", "Semester")
+                        .WithMany("Subjects")
+                        .HasForeignKey("SemesterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Semester");
+                });
+
+            modelBuilder.Entity("Project.Models.Notice", b =>
+                {
+                    b.Navigation("Semester");
+
+                    b.Navigation("Semesters");
+                });
+
+            modelBuilder.Entity("Project.Models.Semester", b =>
+                {
+                    b.Navigation("Subjects");
+                });
+
+            modelBuilder.Entity("Project.Models.Subject", b =>
+                {
+                    b.Navigation("Notes");
                 });
 #pragma warning restore 612, 618
         }

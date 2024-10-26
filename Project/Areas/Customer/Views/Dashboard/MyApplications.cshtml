@@ -1,0 +1,54 @@
+﻿@using Project.Models
+@model DashboardViewModel
+
+@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+<h2>Your Applications</h2>
+@if (Model != null && Model.ApplicationViewModel != null && Model.ApplicationViewModel.Any())
+
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Apply Date</th>
+                <th>College</th>
+                <th>Semester</th>
+
+                <th>Status</th>
+                <th>View</th>
+            </tr>
+        </thead>
+        <tbody>
+           
+            @foreach (var application in Model.ApplicationViewModel)
+
+            {
+                <tr>
+                    <td>@application.ApplyDate</td>
+                    <td>@application.College</td>
+                    <td>@application.Semester
+                      
+
+                    </td>
+                    <td>
+                        <span class="badge
+                            @(application.Status == "Approved" ? "badge-success text-dark" :
+                              application.Status == "Collage Approved" ? "badge-info text-dark" :
+                              "badge-warning text-dark")">
+                            @(application.Status ?? "Unknown")
+                        </span>
+                    </td>
+                    <td><a href="@Url.Action("ViewDetail", new { id = application.Id, sem = application.Semester })">View Detail</a></td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+else
+
+{
+    <p>No applications found.</p>
+}

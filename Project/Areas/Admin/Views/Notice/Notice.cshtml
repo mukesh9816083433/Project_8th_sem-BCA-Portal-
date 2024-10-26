@@ -1,0 +1,196 @@
+﻿@using Project.Models.ViewModel
+@model NoticeViewModel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Add Notice";
+}
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f0f8ff;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    h2, h3 {
+        color: #007bff;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .form-group label, .form-check-label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+    .btn-warning {
+        background-color: #ffc107;
+        border-color: #ffc107;
+    }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+            border-color: #d39e00;
+        }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+
+    table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+    }
+
+    table, th, td {
+        border: 1px solid #ccc;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #007bff;
+    }
+
+    td {
+        background-color: #f9f9f9;
+    }
+</style>
+
+<div class="container">
+    <h2>Add New Notice</h2>
+    <!-- Form to Add a Notice -->
+    <form asp-action="AddNotice" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label asp-for="Heading" class="form-label">Heading</label>
+            <select asp-for="Heading" class="form-control">
+                <option value="Entrance">Entrance</option>
+                <option value="Exam Forms">Exam Forms</option>
+                <option value="Holiday">Holiday</option>
+                <option value="Viva">Viva</option>
+                <option value="Practical Exam">Practical Exam</option>
+                <option value="Workshop">Workshop</option>
+                <option value="Others">Others</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="SelectedSemesters">Select Semesters</label>
+            @foreach (var semester in Model.AllSemesters)
+            {
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="SelectedSubjects[]" value="@semester.Name" />
+                    <label class="form-check-label">@semester.Name</label>
+                </div>
+            }
+        </div>
+        <div class="form-check">
+            <input asp-for="IsAllSemesters" class="form-check-input" type="checkbox" id="selectAllCheckbox" />
+            <label class="form-check-label" for="selectAllCheckbox">Select All Semesters</label>
+        </div>
+        <div class="form-group">
+            <label asp-for="Message" class="form-label">Notice Message</label>
+            <textarea asp-for="Message" class="form-control" rows="4"></textarea>
+        </div>
+        <div class="form-group">
+            <label asp-for="NoticeImage" class="form-label">Notice Image (Optional)</label>
+            <input asp-for="NoticeImage" type="file" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary" id="submitNoticeButton">Submit Notice</button>
+    </form>
+
+    <!-- Table to List All Notices with Edit and Delete Options -->
+    <h3>All Notices</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Heading</th>
+                <th>Message</th>
+                <th>Created At</th>
+                <th>Semesters</th>
+                <th>Notice By</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var notice in Model.AllNotices.OrderByDescending(n => n.CreatedAt))
+            {
+                <tr>
+                    <td>@notice.Heading</td>
+                    <td>@notice.Message</td>
+                    <td>@notice.CreatedAt</td>
+                    <td>
+                        @if (notice.IsAllSemesters)
+                        {
+                            <span>All Semesters</span>
+                        }
+                        else
+                        {
+                            @foreach (var Semester in Model.AllSemesters)
+                            {
+                                bool b = notice.SelectedSubjects.Contains(Semester.Name);
+                                @if (b)
+                                {
+                                    <label>@Semester.Name</label>
+                                }
+                            }
+                        }
+                    </td>
+                    <td>@notice.NoticeBy</td>
+                    <td>
+                        <a asp-action="EditNotice" asp-route-id="@notice.Id" class="btn btn-sm btn-warning">Edit</a>
+                       
+                            <form asp-action="DeleteNotice" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@notice.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this notice?');">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </form>
+                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelector("form").addEventListener("submit", function (event) {
+            let semesterCheckboxes = document.querySelectorAll('input[name="SelectedSubjects[]"]:checked');
+            let noticeMessage = document.querySelector('textarea[name="Message"]').value.trim();
+            let noticeImage = document.querySelector('input[name="NoticeImage"]').value;
+
+            if (semesterCheckboxes.length === 0 || noticeMessage === "" || noticeImage === "") {
+                event.preventDefault();
+                alert("Please fill out all required fields: Select at least one semester, provide a notice message, and upload an image.");
+            }
+        });
+    </script>
+}

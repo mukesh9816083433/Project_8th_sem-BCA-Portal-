@@ -1,0 +1,50 @@
+﻿@model DashboardViewModel
+
+
+@{
+    Layout = "~/Views/Shared/_CollageLayout.cshtml";
+}
+
+<h2>Application Details</h2>
+
+<div class="card">
+    <div class="card-header">
+        Application Details
+    </div>
+    <div class="card-body">
+        <p class="card-text">
+            <strong>Selected Subjects:</strong>
+            @foreach (var sub in Model.Subject)
+            {
+
+                @if (Model.ApplicationViewModel1.SelectedSubjects.Contains(sub.Id))
+                {
+                    <br />
+                    <label class="list-group-horizontal left" style="padding-left: 150px;">@sub.Name</label>
+                }
+            }
+
+        </p>
+        <p class="card-text"><strong>College Name:</strong> @Model.ApplicationViewModel1.College</p>
+        <p class="card-text"><strong>Applied Date:</strong> @Model.ApplicationViewModel1.ApplyDate</p>
+        <p class="card-text"><strong>Application Status:</strong> @Model.ApplicationViewModel1.Status</p>
+        <p class="card-text"><strong>Applied for Semester:</strong> @Model.ApplicationViewModel1.Semester</p>
+        <p class="card-text">
+            <strong>Payment Image</strong>
+            <div id="imagePreview" class="mt-3">
+                @if (!string.IsNullOrEmpty(Model.ApplicationViewModel1.PaymentImage))
+                {
+                    <img id="preview" src="@Url.Content(Model.ApplicationViewModel1.PaymentImage)" alt="Payment Image" class="img-fluid rounded" />
+                }
+                else
+                {
+                    <div class="text-muted">
+                        No payment image uploaded.
+                    </div>
+                }
+            </div>
+
+
+        <a href="@Url.Action("DownloadAdmitCard", new { id = Model.ApplicationViewModel1.Id})" class="btn btn-primary">View & Download Admit Card</a>
+    </div>
+</div>

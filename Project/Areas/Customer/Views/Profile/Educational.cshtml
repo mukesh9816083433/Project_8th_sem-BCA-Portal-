@@ -4,60 +4,173 @@
 @{
     ViewData["Title"] = "Educational Details";
 }
+@model DashboardViewModel
 
-@model Project.ViewModels.DashboardViewModel
+<style>
+    body {
+        background-color: #f0f4f8;
+        font-family: 'Arial', sans-serif;
+    }
 
-<h2>Educational Details</h2>
-<form method="post" enctype="multipart/form-data">
-    <div class="mb-3">
-        <label for="Level" class="form-label">Level</label>
-        <input type="text"
-               class="form-control"
-               id="Level"
-               name="Level"
-               value="@Model.EducationalDetails?.Level"
-        @(Model.EducationalDetails?.IsApproved == true ? "readonly" : "")
-               required />
-    </div>
-    <div class="mb-3">
-        <label for="College" class="form-label">College</label>
-        <input type="text"
-               class="form-control"
-               id="College"
-               name="College"
-               value="@Model.EducationalDetails?.College"
-        @(Model.EducationalDetails?.IsApproved == true ? "readonly" : "")
-               required />
-    </div>
-    <div class="mb-3">
-        <label for="Programme" class="form-label">Programme</label>
-        <input type="text"
-               class="form-control"
-               id="Programme"
-               name="Programme"
-               value="@Model.EducationalDetails?.Programme"
-        @(Model.EducationalDetails?.IsApproved == true ? "readonly" : "")
-               required />
-    </div>
-    <div class="mb-3">
-        <label for="AcademicYear" class="form-label">Academic Year</label>
-        <input type="text"
-               class="form-control"
-               id="AcademicYear"
-               name="AcademicYear"
-               value="@Model.EducationalDetails?.AcademicYear"
-        @(Model.EducationalDetails?.IsApproved == true ? "readonly" : "")
-               required />
-    </div>
-    <div class="mb-3">
-        <label for="RegistrationNumber" class="form-label">Registration Number</label>
-        <input type="text"
-               class="form-control"
-               id="RegistrationNumber"
-               name="RegistrationNumber"
-               value="@Model.EducationalDetails?.RegistrationNumber"
-        @(Model.EducationalDetails?.IsApproved == true ? "readonly" : "")
-               required />
-    </div>
-    <button type="submit" class="btn btn-primary" @(Model.EducationalDetails?.IsApproved == true ? "disabled" : "")>Save</button>
-</form>
+    .container {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+        color: #007bff;
+        text-align: center;
+        font-family: 'Georgia', serif;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-control {
+        border-radius: 5px;
+    }
+
+    .alert-success {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        border-radius: 5px;
+        padding: 10px;
+        margin-top: 20px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        border-radius: 5px;
+        padding: 10px 20px;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+    .img-thumbnail {
+        max-width: 100%;
+        height: auto;
+        max-height: 300px;
+        border-radius: 10px;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="container">
+    <h2>Educational Details</h2>
+    <form method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="Level" class="form-label">Level</label>
+            <input type="text"
+                   class="form-control"
+                   id="Level"
+                   name="Level"
+                   value="@Model.EducationalDetails?.Level"
+            @(Model.EducationalDetails?.IsDeanApproved == true ? "readonly" : "")
+                   required />
+        </div>
+        <div class="mb-3">
+            <label for="College" class="form-label">College</label>
+            <input type="text"
+                   class="form-control"
+                   id="College"
+                   name="College"
+                   value="@Model.EducationalDetails?.College"
+            @(Model.EducationalDetails?.IsDeanApproved == true ? "readonly" : "")
+                   required />
+        </div>
+        <div class="mb-3">
+            <label for="Programme" class="form-label">Programme</label>
+            <input type="text"
+                   class="form-control"
+                   id="Programme"
+                   name="Programme"
+                   value="@Model.EducationalDetails?.Programme"
+            @(Model.EducationalDetails?.IsDeanApproved == true ? "readonly" : "")
+                   required />
+        </div>
+        <div class="mb-3">
+            <label for="AcademicYear" class="form-label">Academic Year</label>
+            <input type="text"
+                   class="form-control"
+                   id="AcademicYear"
+                   name="AcademicYear"
+                   value="@Model.EducationalDetails?.AcademicYear"
+            @(Model.EducationalDetails?.IsDeanApproved == true ? "readonly" : "")
+                   required />
+        </div>
+        <div class="mb-3">
+            <label for="RegistrationNumber" class="form-label">Registration Number</label>
+            <input type="text"
+                   class="form-control"
+                   id="RegistrationNumber"
+                   name="RegistrationNumber"
+                   value="@Model.EducationalDetails?.RegistrationNumber"
+            @(Model.EducationalDetails?.IsDeanApproved == true ? "readonly" : "")
+                   required />
+        </div>
+        <div class="mb-3">
+            <label for="Marksheet10" class="form-label">Upload 10th Marksheet</label>
+            @if (Model.EducationalDetails?.MarksheetPic10 != null)
+            {
+                <p>10th Marksheet:</p>
+                <img src="@Model.EducationalDetails.MarksheetPic10" alt="Uploaded Photo" class="img-thumbnail" />
+            }
+            @if (Model.EducationalDetails?.IsDeanApproved == true)
+            {
+                <p>Photo already uploaded and approved.</p>
+            }
+            else
+            {
+                <input type="file" class="form-control" id="Marksheet10" name="Marksheet10" />
+                @* Include a hidden input to retain the current photo path *@
+                <input type="hidden" name="CurrentMarksheet10" value="@Model.EducationalDetails?.MarksheetPic10" />
+            }
+        </div>
+        <div class="mb-3">
+            <label for="Marksheet12" class="form-label">Upload 12th Marksheet</label>
+            @if (Model.EducationalDetails?.MaeksheetPic12 != null)
+            {
+                <p>12th Marksheet:</p>
+                <img src="@Model.EducationalDetails.MaeksheetPic12" alt="Uploaded Photo" class="img-thumbnail" />
+            }
+            @if (Model.EducationalDetails?.IsDeanApproved == true)
+            {
+                <p>Photo already uploaded and approved.</p>
+            }
+            else
+            {
+                <input type="file" class="form-control" id="Marksheet12" name="Marksheet12" />
+                @* Include a hidden input to retain the current photo path *@
+                <input type="hidden" name="CurrentMarksheet12" value="@Model.EducationalDetails?.MaeksheetPic12" />
+            }
+        </div>
+        @* Approval Messages *@
+        @if (Model.EducationalDetails?.IsApproved == true || Model.EducationalDetails?.IsDeanApproved == true)
+        {
+            <div class="alert alert-success">
+                @if (Model.EducationalDetails?.IsApproved == true)
+                {
+                    <p>Approved by College.</p>
+                }
+                @if (Model.EducationalDetails?.IsDeanApproved == true)
+                {
+                    <p>Approved by Dean.</p>
+                }
+            </div>
+        }
+        <button type="submit" class="btn btn-primary" @(Model.EducationalDetails?.IsDeanApproved == true ? "disabled" : "")>Save</button>
+    </form>
+</div>

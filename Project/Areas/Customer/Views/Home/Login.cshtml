@@ -1,22 +1,84 @@
-﻿@model Project.ViewModels.LoginViewModel
-
+﻿@model LoginViewModel
 @{
     ViewData["Title"] = "Login";
 }
+<style>
+    .gradient-custom {
+        background: #6a11cb;
+        background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+        background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+    }
 
-<h2>Login</h2>
+    body {
+        font-family: Arial, sans-serif;
+    }
 
-<form asp-action="Login" method="post">
-    <div class="form-group">
-        <label asp-for="Username"></label>
-        <input asp-for="Username" class="form-control" />
-        <span asp-validation-for="Username" class="text-danger"></span>
+    .card {
+        border-radius: 1rem;
+        background-color: white;
+        color: #333;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-group input {
+        margin-top: 5px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+</style>
+<section class="vh-100 gradient-custom">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card text-dark">
+                    <div class="card-body p-5 text-center">
+                        <h2 class="fw-bold mb-2 text-uppercase" style="color: #007bff;">Login</h2>
+                        <p class="text-muted mb-5">Please enter your login and password!</p>
+                        <form asp-action="Login" method="post">
+                            <div class="form-group">
+                                <label asp-for="Username">Username</label>
+                                <input asp-for="Username" class="form-control form-control-lg" />
+                                <span asp-validation-for="Username" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Password">Password</label>
+                                <input asp-for="Password" class="form-control form-control-lg" type="password" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block mt-3">Login</button>
+        
+                        </form>
+                        <p class="small mb-5 pb-lg-2"><a class="text-muted" href="#!">Forgot password?</a></p>
+                        <div class="d-flex justify-content-center text-center mt-4 pt-1">
+                            <a href="#!" class="text-dark"><i class="fab fa-facebook-f fa-lg"></i></a>
+                            <a href="#!" class="text-dark"><i class="fab fa-twitter fa-lg mx-4 px-2"></i></a>
+                            <a href="#!" class="text-dark"><i class="fab fa-google fa-lg"></i></a>
+                        </div>
+                        <p class="mb-0">Don't have an account? <a href="Register" class="text-muted fw-bold" >Sign Up</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="Password"></label>
-        <input asp-for="Password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-    <button type="submit" class="btn btn-primary" asp-controller="Home" asp-action="Register">Not Registered</button>
-</form>
+</section>

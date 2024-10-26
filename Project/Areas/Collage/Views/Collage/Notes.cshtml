@@ -1,0 +1,81 @@
+﻿@model IEnumerable<Project.Models.Semester>
+@{
+    Layout = "~/Views/Shared/_CollageLayout.cshtml";
+    ViewData["Title"] = "Manage Notes";
+}
+
+<div class="container">
+    <h3 class="text-center">Manage Notes</h3>
+
+    <!-- Search Bar -->
+    @using (Html.BeginForm("Notes", "Collage", FormMethod.Get, new { area = "Collage" }))
+    {
+        <div class="input-group mb-3">
+            <input type="text" name="searchQuery" class="form-control" placeholder="Search subjects or notes..." />
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+        </div>
+    }
+
+    <hr />
+
+    
+
+    <hr />
+
+    <!-- List of Semesters, Subjects, and Notes -->
+    @foreach (var semester in Model)
+    {
+        <div class="card mt-4">
+            <div class="card-header">
+                <h4>@semester.Name <i class="fas fa-folder"></i></h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Note</th>
+                            <th></th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var subject in semester.Subjects)
+                        {
+                            <tr>
+                                <td>@subject.Name</td>
+                                <td>
+                                    @foreach (var note in subject.Notes)
+                                    {
+                                        <div class="note-item">
+                                            <a href="@Url.Content(note.FilePath)" target="_blank">
+                                                <i class="far fa-file-alt"></i> @note.FileName
+                                            </a>
+                                            
+                                        </div>
+                                    }
+                                </td>
+                                
+                                <td>
+                                    
+                                    <form asp-action="AddNote" method="post" enctype="multipart/form-data" class="d-inline" style="margin-top: 50px;">
+                                        <input type="hidden" name="subjectId" value="@subject.Id" />
+                                        <input type="file" name="file" class="form-control" required />
+                                        <button type="submit" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-plus"></i> Add Note
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <hr />
+    }
+</div>

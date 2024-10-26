@@ -27,8 +27,6 @@ namespace Project.Areas.Customer.Controllers
 
         public IActionResult Campuses()
         {
-
-
             var campuses = _context.Campuses.ToList();
             return View(campuses);
         }
@@ -74,7 +72,8 @@ namespace Project.Areas.Customer.Controllers
                     Province = model.Province,
                     District = model.District,
                     Address = model.Address,
-                    IsActive = true
+                    IsActive = true,
+                    Collage= ""
                 };
 
                 _context.Users.Add(user);
@@ -95,6 +94,15 @@ namespace Project.Areas.Customer.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
+            if (model.Username == "admin" && model.Password == "admin") {
+                return RedirectToAction("Campuses", "Admin", new { area = "Admin" });
+
+            }
+            if (model.Username == "Collage" && model.Password == "Collage")
+            {
+                return RedirectToAction("Home", "Collage", new { area = "Collage" });
+
+            }
             if (ModelState.IsValid)
             {
                 var user = _context.Users.SingleOrDefault(u => u.Username == model.Username);

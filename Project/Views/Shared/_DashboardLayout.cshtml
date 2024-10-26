@@ -1,7 +1,20 @@
-﻿@model Project.ViewModels.DashboardViewModel
+﻿@model DashboardViewModel
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+        .navbar-nav .nav-item .nav-link.active {
+            border-bottom: 6px solid rgba(0, 0, 0, 0.1); /* Example: Blue border */
+            /* OR */
+            box-shadow: 0 2px 64px rgba(0, 0, 0, 0.1);
+            /* Example: Light shadow */
+            background-color: #007bff /* Light gray background */
+            color: #000; /* Text color */
+            font-weight: bold; /* Bold text */
+            text-decoration: underline;
+        }
+
+        }</style>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Project</title>
@@ -13,22 +26,20 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 fixed-top">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Project</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BCA Portal</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark @(ViewData["ActiveSection"] as string == "Index" ? "active" : "")"
+                            asp-area="" asp-controller="Dashboard" asp-action="Index">Home</a>
                         </li>
-
-
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle text-dark @(ViewData["ActiveSection"] as string == "Profile" ? "active" : "")" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Profile
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="profileDropdown">
@@ -37,30 +48,32 @@
                                 <li><a class="dropdown-item" asp-area="" asp-controller="Profile" asp-action="Contact">Contact</a></li>
                             </ul>
                         </li>
-
-
-                       
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Forms">Forms</a>
+                            <a class="nav-link text-dark @(ViewData["ActiveSection"] as string == "Forms" ? "active" : "")" 
+                             asp-area="Customer" asp-controller="Dashboard" asp-action="Forms">Forms</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Notes">Notes</a>
+                            <a class="nav-link text-dark @(ViewData["ActiveSection"] as string == "Notes" ? "active" : "")" 
+                            asp-area="" asp-controller="Dashboard" asp-action="Notes">Notes</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Notices">Notices</a>
+                            <a class="nav-link text-dark @(ViewData["ActiveSection"] as string == "Notices" ? "active" : "")"
+                            asp-area="" asp-controller="Dashboard" asp-action="Notice">Notices</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="PreviousYearQuestions">Previous Year Questions</a>
+                            <a class="nav-link text-dark @(ViewData["ActiveSection"] as string == "PreViousYearQuestions" ? "active" : "")" 
+                             asp-area="" asp-controller="Dashboard" asp-action="PreviousYearQuestions">Previous Year Questions</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Results">Results</a>
+                            <a class="nav-link text-dark @(ViewData["ActiveSection"] as string == "Results" ? "active" : "")" 
+                            asp-area="" asp-controller="Dashboard" asp-action="Results">Results</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="MyApplications">My Applications</a>
-
+                            <a class="nav-link text-dark  @(ViewData["ActiveSection"] as string == "My Applications" ? "active" : "")"
+                            asp-area="" asp-controller="Dashboard" asp-action="MyApplications">My Applications</a>
+                        </li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
-                        
                         <form class="d-flex">
                             <input class="form-control me-sm-2" type="search" placeholder="Search">
                             <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
@@ -73,6 +86,7 @@
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

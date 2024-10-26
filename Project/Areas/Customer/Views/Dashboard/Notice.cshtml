@@ -1,0 +1,191 @@
+﻿@model DashboardViewModel
+@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+<style>
+    body {
+        background-color: #f4f6f9;
+        font-family: 'Arial', sans-serif;
+    }
+
+    h2 {
+        color: #007bff;
+        text-align: center;
+        font-family: 'Georgia', serif;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        font-size: 2.5rem;
+    }
+
+    .form-group label, .form-check-label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-check-input {
+        margin-right: 10px;
+    }
+
+    .card {
+        border-radius: 15px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        border: none;
+        overflow: hidden;
+        margin-bottom: 30px;
+        transition: transform 0.3s ease-in-out;
+        background-color: #ffffff;
+    }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+    .card-header {
+        background-color: #007bff;
+        color: white;
+        padding: 20px;
+        border-bottom: 3px solid #0056b3;
+        font-family: 'Courier New', monospace;
+        font-size: 1.5rem;
+        text-align: center;
+        border-radius: 15px 15px 0 0;
+    }
+
+    .card-body {
+        padding: 25px;
+        background-color: #f8f9fa;
+    }
+
+    .card-footer {
+        background-color: #e9ecef;
+        padding: 15px;
+        border-top: 2px solid #dee2e6;
+        text-align: right;
+    }
+
+    .img-fluid {
+        max-width: 100%;
+        height: auto;
+        max-height: 650px; /* Increased the height */
+        border-radius: 10px;
+        display: block;
+        margin: 20px auto;
+    }
+
+    .btn-primary {
+        background-color: #28a745;
+        border-color: #28a745;
+        padding: 10px 20px;
+        font-size: 1.1rem;
+        border-radius: 25px;
+    }
+
+        .btn-primary:hover {
+            background-color: #218838;
+            border-color: #218838;
+        }
+
+    .search-form {
+        background-color: #ffffff;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 40px;
+        border-left: 5px solid #17a2b8; /* Light blue accent */
+    }
+
+    .form-row {
+        margin-bottom: 15px;
+    }
+
+        .form-row input[type="text"] {
+            border-radius: 25px;
+            padding: 15px;
+            font-size: 1.1rem;
+            border: 1px solid #ced4da;
+        }
+
+    .form-check {
+        margin: 10px 0;
+    }
+
+    .notice-footer-info {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+
+    .notice-by {
+        font-style: italic;
+        color: #dc3545; /* Red accent for NoticeBy */
+    }
+
+</style>
+
+<div class="container">
+    <h2>Notices</h2>
+
+    <!-- Search form -->
+    <div class="search-form">
+        <form asp-action="Notice" method="get">
+            <div class="form-row">
+                <label for="searchTerm">Search by Heading or Message:</label>
+                <input type="text" class="form-control" name="searchTerm" value="@Model.SearchTerm" placeholder="Search notices..." />
+            </div>
+            <div class="form-row">
+                <label for="SelectedSubjects">Filter by Semester:</label>
+                <div class="form-group">
+                    @foreach (var semester in Model.AllSemesters)
+                    {
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="SelectedSubjects[]" value="@semester.Name" />
+                            <label class="form-check-label">@semester.Name</label>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="form-row">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Notices List -->
+    <div class="row">
+        @if (Model.Notices != null && Model.Notices.Any())
+        {
+            @foreach (var notice in Model.Notices)
+            {
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            @notice.Heading
+                           
+                            
+                           
+                        </div>
+                        <div class="card-body">
+                            <p><b>@notice.Message</b></p>
+                            @if (!string.IsNullOrEmpty(notice.ImagePath))
+                            {
+                                <img src="@notice.ImagePath" alt="Notice Image" class="img-fluid" />
+                            }
+                        </div>
+                        <div class="card-footer">
+                            <div class="notice-footer-info">
+                                <span>Posted on @notice.CreatedAt.ToString("dd MMM yyyy")</span>
+                                <span class="notice-by">Notice by: @notice.NoticeBy</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+            }
+        }
+        else
+        {
+            <p>No notices found.</p>
+        }
+    </div>
+</div>
